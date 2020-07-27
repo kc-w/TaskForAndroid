@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+            android:layout_width="400dp"
+            android:layout_height="300dp"
+            android:background="@drawable/dialog_save_style"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="人员选择"
+                android:textColor="@color/blue"
+                android:textSize="20dp" />
+
+        <ScrollView
+                android:layout_below="@id/tip"
+                android:layout_above="@id/ll_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+            <com.zhy.view.flowlayout.TagFlowLayout
+                    android:id="@+id/id_flowlayout"
+                    app:max_select="-1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"/>
+
+
+        </ScrollView>
+
+
+
+        <LinearLayout
+                android:id="@+id/ll_btn"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+            <Button
+                    android:id="@+id/dialog1_button1"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:text="确认"
+                    android:textSize="17dp" />
+
+
+            <Button
+                    android:id="@+id/dialog1_button2"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:text="取消"
+                    android:textSize="17dp"
+                    android:gravity="center"/>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

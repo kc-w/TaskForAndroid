@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--设置当状态为未点击时的样式-->
+    <item android:state_pressed="false">
+        <shape>
+            <!--颜色-->
+            <solid android:color="@color/write"/>
+            <!--边角弧度-->
+            <corners android:radius="4dp"/>
+            <!--边框设置 color：边框颜色 ， width：边框厚度-->
+            <stroke android:color="@color/blue" android:width="1dp"/>
+        </shape>
+    </item>
+    <!--同理，该处是设置点击状态时的样式-->
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/blue"/>
+            <corners android:radius="4dp"/>
+            <stroke android:color="@color/blue" android:width="1dp"/>
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 设置透明背景色 -->
+    <solid android:color="@color/write" />
+
+    <!-- 设置一个黑色边框 -->
+    <stroke
+            android:width="2px"
+            android:color="@color/blue" />
+    <!-- 渐变,startColor:起始颜色endColor:结束颜色 centerColor:中间颜色 angle:方向角度,等于0时,从左到右angle = 90度时从下往上-->
+    <gradient
+            android:angle="0"
+            android:startColor="@color/blue"
+            android:endColor="@color/blue"/>
+    <!-- 设置四个圆角的半径 -->
+    <corners
+            android:bottomLeftRadius="4px"
+            android:bottomRightRadius="4px"
+            android:topLeftRadius="4px"
+            android:topRightRadius="4px" />
+    <!-- 设置一下边距,让空间大一点 -->
+    <padding
+            android:bottom="4dp"
+            android:left="4dp"
+            android:right="4dp"
+            android:top="4dp" />
+</shape>
