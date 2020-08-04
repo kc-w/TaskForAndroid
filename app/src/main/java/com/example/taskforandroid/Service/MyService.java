@@ -35,8 +35,8 @@ public class MyService extends GTIntentService {
 
 
     public MyService() {
-    }
 
+    }
 
 
 
@@ -82,9 +82,6 @@ public class MyService extends GTIntentService {
 
 
         Log.e(TAG, "收到通知!" );
-
-
-
 
 
     }

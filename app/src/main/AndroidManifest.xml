@@ -1,103 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.taskforandroid">
+    package="com.example.taskforandroid">
 
-    <!-- 网络连接 -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/> <!-- 获取手机状态参数，并作为生成个推唯一标识的必要参数 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> <!-- 查看网络状态，sdk重连机制等需要使用 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> <!-- 查看wifi连接状态 -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/> <!-- 开机自启动权限，提升sdk活跃，保障触达 -->
-    <uses-permission android:name="android.permission.VIBRATE"/> <!-- 震动权限（使用通知功能必选） -->
-    <uses-permission
-            android:name="getui.permission.GetuiService.${applicationId}"/> <!-- 自定义权限，为了防止小部分手机服务没法正常工作（可选） -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络连接 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 获取手机状态参数，并作为生成个推唯一标识的必要参数 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 查看网络状态，sdk重连机制等需要使用 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 查看wifi连接状态 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 开机自启动权限，提升sdk活跃，保障触达 -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限（使用通知功能必选） -->
+    <uses-permission android:name="getui.permission.GetuiService.${applicationId}" /> <!-- 自定义权限，为了防止小部分手机服务没法正常工作（可选） -->
     <permission
-            android:name="getui.permission.GetuiService.${applicationId}"
-            android:protectionLevel="normal"/>
+        android:name="getui.permission.GetuiService.${applicationId}"
+        android:protectionLevel="normal" />
 
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/><!--忽略电池优化-->
-
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- 写sd卡权限，做数据备份 -->
-    <uses-permission android:name="android.permission.PERMISSIONS_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/><!-- 8.0安装apk权限，需要允许安装未知应用 -->
-    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/><!--前台服务-->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- 忽略电池优化 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 写sd卡权限，做数据备份 -->
+    <uses-permission android:name="android.permission.PERMISSIONS_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 读sd卡权限，做数据备份 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- 8.0安装apk权限，需要允许安装未知应用 -->
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-            android:allowBackup="true"
-            android:icon="@drawable/ico"
-            android:label="@string/app_name"
-            android:networkSecurityConfig="@xml/network_https_config"
-            android:roundIcon="@drawable/ico"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+        android:allowBackup="true"
+        android:icon="@drawable/ico"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_https_config"
+        android:roundIcon="@drawable/ico"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <service
+            android:name=".Service.MusicService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <receiver
-                android:name=".Receiver.MyReceiver"
-                android:enabled="true"
-                android:exported="true">
-        </receiver>
+            android:name=".Receiver.MyReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":live" />
 
         <service
-                android:name=".Service.TopService"
-                android:enabled="true"
-                android:exported="true">
-        </service>
+            android:name=".Service.StartService"
+            android:enabled="true"
+            android:exported="true" />
         <service
-                android:name=".Service.TopService$InnerService"
-                android:enabled="true"
-                android:exported="true">
-        </service>
+            android:name=".Service.TopService"
+            android:enabled="true"
+            android:exported="true" />
         <service
-                android:name=".Service.MyService"
-                android:enabled="true"
-                android:exported="true"
-                android:permission="android.permission.BIND_JOB_SERVICE"
-                android:priority="1000">
-        </service>
+            android:name=".Service.TopService$InnerService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".Service.MyService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:priority="1000" />
 
         <provider
-                android:name="android.support.v4.content.FileProvider"
-                android:authorities="fileProvider"
-                android:exported="false"
-                android:grantUriPermissions="true">
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
-                    android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/file_paths"/>
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         </provider>
 
         <activity
-                android:name=".Activity.SearchActivity"
-                android:launchMode="singleTask">
-        </activity>
+            android:name=".Activity.PxActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-                android:name=".Activity.BaseActivity"
-                android:launchMode="singleTask">
-        </activity>
+            android:name=".Activity.ProgressActivity"
+            android:launchMode="singleTask" />
         <activity
-                android:name=".Activity.ImageGetter.BigImgActivity"
-                android:launchMode="singleTask">
-        </activity>
+            android:name=".Activity.SearchActivity"
+            android:launchMode="singleTask" />
         <activity
-                android:name=".Activity.ItemActivity"
-                android:launchMode="singleTask">
-        </activity>
+            android:name=".Activity.BaseActivity"
+            android:launchMode="singleTask" />
         <activity
-                android:name=".Activity.EditActivity"
-                android:launchMode="singleTask">
-        </activity>
+            android:name=".Activity.BigImgActivity"
+            android:launchMode="singleTask" />
         <activity
-                android:name=".Activity.MainActivity"
-                android:launchMode="singleTask">
-        </activity>
+            android:name=".Activity.ItemActivity"
+            android:launchMode="singleTask" />
         <activity
-                android:name=".Activity.LoginActivity"
-                android:launchMode="singleTask">
+            android:name=".Activity.EditActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".Activity.MainActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".Activity.LoginActivity"
+            android:launchMode="singleTask">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>

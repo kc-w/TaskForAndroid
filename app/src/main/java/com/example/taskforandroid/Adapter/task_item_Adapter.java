@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import com.example.taskforandroid.Activity.ItemActivity;
 import com.example.taskforandroid.Bean.TaskAndUser;
 import com.example.taskforandroid.R;
-import com.example.taskforandroid.Tool.GetDate;
+import com.example.taskforandroid.Tool.GetSystemUtils;
 
 import java.text.ParseException;
 import java.util.List;
@@ -83,8 +82,8 @@ public class task_item_Adapter extends RecyclerView.Adapter<task_item_Adapter.Vi
 
         if("进行中".equals(taskAndUserList.get(position).getTask().getState())){
             try {
-                int max=GetDate.maxdays(taskAndUserList.get(position).getTask().getStart_time(),taskAndUserList.get(position).getTask().getPreset_time());
-                int progress= GetDate.newdays(taskAndUserList.get(position).getTask().getAgree_time());
+                int max= GetSystemUtils.maxdays(taskAndUserList.get(position).getTask().getStart_time(),taskAndUserList.get(position).getTask().getPreset_time());
+                int progress= GetSystemUtils.newdays(taskAndUserList.get(position).getTask().getAgree_time());
                 if (progress>=max){
                     progress=max;
                 }

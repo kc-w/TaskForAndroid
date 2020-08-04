@@ -53,7 +53,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 
 public class MainActivity extends BaseActivity {
 

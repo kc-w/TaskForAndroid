@@ -1,60 +1,37 @@
 package com.example.taskforandroid.Activity;
 
-import android.annotation.SuppressLint;
-import android.app.AppOpsManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import android.os.Environment;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.example.taskforandroid.Dialog.LoadingDialog;
 import com.example.taskforandroid.Dialog.SaveDialog;
 import com.example.taskforandroid.R;
+import com.example.taskforandroid.Service.MusicService;
+import com.example.taskforandroid.Service.StartService;
 import com.example.taskforandroid.Service.TopService;
-import com.example.taskforandroid.Tool.GetDate;
 import com.example.taskforandroid.Tool.MobileInfoUtils;
-import com.igexin.sdk.IUserLoggerInterface;
 import com.igexin.sdk.PushManager;
 import okhttp3.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.text.ParseException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import static android.os.Environment.DIRECTORY_DOWNLOADS;
-import static android.support.v4.app.NotificationManagerCompat.IMPORTANCE_DEFAULT;
 
 public class LoginActivity extends BaseActivity {
 
@@ -84,6 +61,9 @@ public class LoginActivity extends BaseActivity {
         //初始化个推
         PushManager.getInstance().initialize(this);
 
+        Intent intent1 = new Intent(this, StartService.class);
+        startService(intent1);
+
 
 
         //关闭电池优化
@@ -94,6 +74,9 @@ public class LoginActivity extends BaseActivity {
             gotoSet();
         }
 
+        //启动后台服务播放音乐
+        Intent intent2 = new Intent(this, MusicService.class);
+        startService(intent2);
 
 
         String autoStart = preferences.getString("autoStart",null);
@@ -151,8 +134,6 @@ public class LoginActivity extends BaseActivity {
         edit2 = findViewById(R.id.password);
 
 
-        Intent intent = new Intent(this, TopService.class);
-        startService(intent);
 
 
 
@@ -189,6 +170,16 @@ public class LoginActivity extends BaseActivity {
 
 
     }
+
+
+    public void startKeepLive(){
+
+
+
+
+
+    }
+
 
     //关闭电池优化
     private void closeBatteryCapacity(){

@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.WindowManager;
 import com.example.taskforandroid.R;
 
+
+//跳转开启自启动权限
 public class MobileInfoUtils{
 
     //获取手机类型

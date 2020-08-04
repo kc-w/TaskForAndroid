@@ -1,33 +1,39 @@
 package com.example.taskforandroid.Activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.example.taskforandroid.Activity.ImageGetter.MyImageGetter;
-import com.example.taskforandroid.Activity.ImageGetter.MyTagHandler;
-import com.example.taskforandroid.Bean.Task;
+
+import com.example.taskforandroid.Activity.js.MJavascriptInterface;
+import com.example.taskforandroid.Activity.js.MyWebViewClient;
 import com.example.taskforandroid.Bean.TaskAndUser;
 import com.example.taskforandroid.R;
+import com.example.taskforandroid.Tool.GetSystemUtils;
+import com.example.taskforandroid.View.RichEditorNew;
 import com.google.gson.Gson;
+
+
 import okhttp3.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ItemActivity extends BaseActivity {
 
@@ -41,7 +47,7 @@ public class ItemActivity extends BaseActivity {
     TextView item6_tv;
     TextView item7_tv;
     TextView item8_tv;
-    TextView item9_tv;
+    RichEditorNew item9_tv;
 
     int id;
     TaskAndUser taskAndUser;
@@ -51,17 +57,23 @@ public class ItemActivity extends BaseActivity {
     Button button3;
     Button button4;
     Button button5;
+    Button button6;
 
-    MyImageGetter myImageGetter;
-    MyTagHandler tagHandler;
+//    MyImageGetter myImageGetter;
+//    MyTagHandler tagHandler;
 
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
+
+    Activity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
+
+
+        context = this;
 
         //找到标题栏控件
         Toolbar toolbar=findViewById(R.id.toolbar_item);
@@ -73,6 +85,8 @@ public class ItemActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //设置是否显示toolbar的标题
         getSupportActionBar().setDisplayShowTitleEnabled(true);
+
+
 
 
         //读取intent的数据给bundle对象
@@ -88,9 +102,11 @@ public class ItemActivity extends BaseActivity {
         item6_tv=findViewById(R.id.item6_tv);
         item7_tv=findViewById(R.id.item7_tv);
         item8_tv=findViewById(R.id.item8_tv);
-        item9_tv=findViewById(R.id.item9_tv);
-        myImageGetter = new MyImageGetter(this, item9_tv);
-        tagHandler = new MyTagHandler(this);
+        item9_tv=findViewById(R.id.richEditor);
+
+
+//        myImageGetter = new MyImageGetter(this, item9_tv);
+//        tagHandler = new MyTagHandler(this);
 
         //批准
         button1=findViewById(R.id.agree);
@@ -134,18 +150,40 @@ public class ItemActivity extends BaseActivity {
             }
         });
 
+        button6=findViewById(R.id.add_progress);
+        button6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Intent intent = new Intent(context, ProgressActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("task_id", id);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+            }
+        });
+
 
         //读取登录历史信息userinfo
         preferences = this.getSharedPreferences("userinfo", MODE_PRIVATE);
         editor = preferences.edit();
 
 
-        okhttpDate();
+
 
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+
+        okhttpDate();
+
+    }
 
     //重写菜单点击监听
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -177,7 +215,7 @@ public class ItemActivity extends BaseActivity {
                 call.enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        finish();
+                        gohome();
                         ToastMeaagge("网络异常!");
 
                     }
@@ -191,7 +229,7 @@ public class ItemActivity extends BaseActivity {
                             JSONObject jsonObject = new JSONObject(data);
                             String message = jsonObject.getString("message");
                             ToastMeaagge(message);
-                            finish();
+                            gohome();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -204,7 +242,7 @@ public class ItemActivity extends BaseActivity {
             }
         }).start();
 
-        finish();
+        gohome();
 
     }
 
@@ -264,7 +302,35 @@ public class ItemActivity extends BaseActivity {
     }
 
 
+    public void gohome(){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+
+    }
+
+
+
+    public static String [] returnImageUrlsFromHtml(String htmlCode) {
+        List<String> imageSrcList = new ArrayList<String>();
+        Pattern p = Pattern.compile("<img\\b[^>]*\\bsrc\\b\\s*=\\s*('|\")?([^'\"\n\r\f>]+(\\.jpg|\\.bmp|\\.eps|\\.gif|\\.mif|\\.miff|\\.png|\\.tif|\\.tiff|\\.svg|\\.wmf|\\.jpe|\\.jpeg|\\.dib|\\.ico|\\.tga|\\.cut|\\.pic|\\b)\\b)[^>]*>", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(htmlCode);
+        String quote = null;
+        String src = null;
+        while (m.find()) {
+            quote = m.group(1);
+            src = (quote == null || quote.trim().length() == 0) ? m.group(2).split("//s+")[0] : m.group(2);
+            imageSrcList.add(src);
+        }
+        if (imageSrcList == null || imageSrcList.size() == 0) {
+            Log.e("imageSrcList","资讯中未匹配到图片链接");
+            return null;
+        }
+        return imageSrcList.toArray(new String[imageSrcList.size()]);
+    }
+
+
     Gson gson = new Gson();
+    @SuppressLint("HandlerLeak")
     public Handler handler=new Handler(){
         @SuppressLint("HandlerLeak")
         @Override
@@ -316,8 +382,47 @@ public class ItemActivity extends BaseActivity {
 
                     item8_tv.setText(taskAndUser.getTask().getState());
 
-                    item9_tv.setText(Html.fromHtml(taskAndUser.getTask().getContent(), myImageGetter, tagHandler));
-                    item9_tv.setMovementMethod(LinkMovementMethod.getInstance());
+
+                    //下载权限需要
+                    GetSystemUtils.verifyStoragePermissions(context);
+
+
+                    //允许javascript执行
+                    item9_tv.getSettings().setJavaScriptEnabled(true);
+                    //设置缓存开启
+                    item9_tv.getSettings().setAppCacheEnabled(true);
+                    //设置可以调用数据库
+                    item9_tv.getSettings().setDatabaseEnabled(true);
+                    //设置dom存储
+                    item9_tv.getSettings().setDomStorageEnabled(true);
+
+                    //帮助WebView处理各种请求事件；
+                    item9_tv.setWebViewClient(new MyWebViewClient());
+
+                    String[] imageUrls = returnImageUrlsFromHtml(taskAndUser.getTask().getContent());
+
+                    //暴露一个java对象给js，使得js可以直接调用方法，（暴露的对象，对象名）
+                    item9_tv.addJavascriptInterface(new MJavascriptInterface(context,imageUrls), "imagelistener");
+
+
+                    //载入html
+                    item9_tv.loadDataWithBaseURL("",
+                            taskAndUser.getTask().getContent(), "text/html", "utf-8", null);
+
+
+
+
+
+
+
+
+
+
+
+//                    item9_tv.setDownloadListener(DownloadTask.getDefaultDownloadListener(context));
+
+//                    item9_tv.setText(Html.fromHtml(taskAndUser.getTask().getContent(), myImageGetter, tagHandler));
+//                    item9_tv.setMovementMethod(LinkMovementMethod.getInstance());
 
 
 
@@ -349,6 +454,10 @@ public class ItemActivity extends BaseActivity {
                             }
                         }
 
+
+
+                        button6.setVisibility(View.VISIBLE);
+
                     }
 
 
@@ -358,6 +467,8 @@ public class ItemActivity extends BaseActivity {
                     }
 
                     break;
+
+
 
             }
         }

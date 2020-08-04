@@ -76,6 +76,10 @@ public class Fragment1 extends Fragment {
 
 
 
+
+
+
+
     @Override//当Fragment所在的Activity启动完成后调用
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -84,7 +88,6 @@ public class Fragment1 extends Fragment {
         preferences = getContext().getSharedPreferences("userinfo", MODE_PRIVATE);
         sessionid= preferences.getString("sessionid","");
 
-        okhttpDate();
 
 
         RefreshLayout refreshLayout = (RefreshLayout)getActivity().findViewById(R.id.smartLayout1);
@@ -105,6 +108,14 @@ public class Fragment1 extends Fragment {
     }
 
 
+    @Override//fragment可见时调用
+    public void onStart() {
+        super.onStart();
+        //请求数据
+        okhttpDate();
+
+
+    }
 
     public void okhttpDate() {
 

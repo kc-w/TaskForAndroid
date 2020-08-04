@@ -17,6 +17,8 @@ import android.util.Log;
 import com.example.taskforandroid.R;
 import com.example.taskforandroid.Receiver.MyReceiver;
 
+
+//前台服务
 public class TopService extends Service {
 
 
