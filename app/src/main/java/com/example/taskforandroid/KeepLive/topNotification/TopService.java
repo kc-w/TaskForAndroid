@@ -1,21 +1,19 @@
-package com.example.taskforandroid.Service;
+package com.example.taskforandroid.KeepLive.topNotification;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.example.taskforandroid.R;
-import com.example.taskforandroid.Receiver.MyReceiver;
+import com.example.taskforandroid.KeepLive.MyReceiver;
 
 
 //前台服务

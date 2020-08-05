@@ -1,4 +1,4 @@
-package com.example.taskforandroid.Service;
+package com.example.taskforandroid.KeepLive;
 
 import android.app.Notification;
 import android.app.Service;
@@ -27,14 +27,14 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class MyService extends GTIntentService {
+public class GTService extends GTIntentService {
 
 
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
 
-    public MyService() {
+    public GTService() {
 
     }
 

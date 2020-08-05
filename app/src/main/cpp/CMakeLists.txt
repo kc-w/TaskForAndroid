@@ -12,7 +12,8 @@ add_library( #设置库的名称
         SHARED
 
         #提供到源文件的相对路径
-        native-lib.cpp )
+        native-lib.cpp
+        )
 
 #搜索指定的预构建库并将路径存储为变量,CMake在搜索路径中包含了系统库 default，只需要指定公共NDK库的名称
 find_library( #设置路径变量的名称

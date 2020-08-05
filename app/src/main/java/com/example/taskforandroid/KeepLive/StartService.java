@@ -1,15 +1,11 @@
-package com.example.taskforandroid.Service;
+package com.example.taskforandroid.KeepLive;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 
-import com.example.taskforandroid.Receiver.MyReceiver;
+import com.example.taskforandroid.KeepLive.MyReceiver;
 import com.igexin.sdk.PushManager;
 
 //重启服务

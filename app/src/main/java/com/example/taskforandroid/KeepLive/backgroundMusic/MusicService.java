@@ -1,4 +1,4 @@
-package com.example.taskforandroid.Service;
+package com.example.taskforandroid.KeepLive.backgroundMusic;
 
 import android.app.Service;
 import android.content.Intent;
@@ -23,7 +23,7 @@ public class MusicService extends Service {
                 public void onAudioFocusChange(int focusChange) {
                     switch (focusChange) {
                         case AudioManager.AUDIOFOCUS_GAIN:
-                            Log.e(TAG, "AUDIOFOCUS_GAIN");
+                            Log.e(TAG, "获得了Audio Focus");
                             try {
                                 startPlayMusic();
                             } catch (Exception e) {
@@ -31,14 +31,17 @@ public class MusicService extends Service {
                             }
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS:
-                            Log.e(TAG, "AUDIOFOCUS_LOSS");
-                            mAudioManager.abandonAudioFocus(mAudioFocusChange);
+                            Log.e(TAG, "失去了Audio Focus");
+//                            startPlayMusic();
+//                            mAudioManager.abandonAudioFocus(mAudioFocusChange);
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                            Log.e(TAG, "AUDIOFOCUS_LOSS_TRANSIENT");
+                            Log.e(TAG, "暂时失去Audio Focus，停止播放并会很快再次获得");
+                            startPlayMusic();
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                            Log.e(TAG, "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+                            Log.e(TAG, "暂时失去AudioFocus，但是可以继续播放，不过要在降低音量");
+                            startPlayMusic();
                             break;
                     }
                 }
@@ -61,7 +64,7 @@ public class MusicService extends Service {
         if (mAudioManager != null)
             mAudioManager.requestAudioFocus(mAudioFocusChange, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-        mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.no_notice);
+        mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw);
         mMediaPlayer.setLooping(true);
 
         startPlayMusic();
@@ -88,7 +91,7 @@ public class MusicService extends Service {
     public void onDestroy() {
         super.onDestroy();
         stopPlayMusic();
-        Log.e(TAG, "---->onDestroy,停止服务");
+        Log.e(TAG, "停止服务");
     }
 
 

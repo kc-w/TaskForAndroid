@@ -19,11 +19,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.example.taskforandroid.Dialog.LoadingDialog;
 import com.example.taskforandroid.Dialog.SaveDialog;
+import com.example.taskforandroid.KeepLive.JobSchedule.MyJobService;
 import com.example.taskforandroid.R;
-import com.example.taskforandroid.Service.MusicService;
-import com.example.taskforandroid.Service.StartService;
-import com.example.taskforandroid.Service.TopService;
+import com.example.taskforandroid.KeepLive.backgroundMusic.MusicService;
+import com.example.taskforandroid.KeepLive.StartService;
 import com.example.taskforandroid.Tool.MobileInfoUtils;
+import com.example.taskforandroid.KeepLive.onePx.KeepManager;
 import com.igexin.sdk.PushManager;
 import okhttp3.*;
 import org.json.JSONException;
@@ -61,8 +62,19 @@ public class LoginActivity extends BaseActivity {
         //初始化个推
         PushManager.getInstance().initialize(this);
 
+        //开启服务注册广播MyReceiver监听锁屏，解锁
         Intent intent1 = new Intent(this, StartService.class);
         startService(intent1);
+
+        //启动后台服务播放音乐
+        Intent intent2 = new Intent(this, MusicService.class);
+        startService(intent2);
+
+//        //开启管理，监听广播开启关闭一像素活动
+//        KeepManager.getInstance().registerKeep(this);
+
+        //开启JobSchedule定期拉活
+        MyJobService.startJob(this);
 
 
 
@@ -74,9 +86,7 @@ public class LoginActivity extends BaseActivity {
             gotoSet();
         }
 
-        //启动后台服务播放音乐
-        Intent intent2 = new Intent(this, MusicService.class);
-        startService(intent2);
+
 
 
         String autoStart = preferences.getString("autoStart",null);
@@ -172,13 +182,7 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    public void startKeepLive(){
 
-
-
-
-
-    }
 
 
     //关闭电池优化
