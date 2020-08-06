@@ -5,12 +5,14 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -70,13 +72,24 @@ public class GetSystemUtils {
 
 
 
-
-
+    //返回视频路径
+    public static String getRealPathFromURI(Context context, Uri contentUri) {
+        String res = null;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor.moveToFirst()) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            res = cursor.getString(column_index);
+        }
+        cursor.close();
+        return res;
+    }
 
 
 
     //根据Uri创建临时文件，并返回临时文件的绝对路径
     public static String getFilePathFromUri(Context context, Uri uri,String suffix) {
+
 
         if (uri == null) return null;
 
@@ -92,7 +105,7 @@ public class GetSystemUtils {
             input = new FileInputStream(fd);
 
 
-            File file = new File(context.getExternalCacheDir(), "tmpfilename"+ suffix);
+            File file = new File(context.getExternalCacheDir(), System.currentTimeMillis()+ suffix);
 
             String tempFilename = file.getAbsolutePath();
             output = new FileOutputStream(tempFilename);
@@ -150,7 +163,7 @@ public class GetSystemUtils {
 
 
 
-    //保存文件到应用的缓存目录
+    //保存图片到应用的缓存目录
     public static String saveToSdCard(Context context,Bitmap bitmap) {
         File file = new File(context.getExternalCacheDir(), System.currentTimeMillis() + ".jpg");
         try {

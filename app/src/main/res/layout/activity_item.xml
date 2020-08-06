@@ -8,19 +8,22 @@
         android:orientation="vertical"
         tools:context=".Activity.ItemActivity">
 
+
+
     <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_item"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:background="@color/blue"
-            app:title="事件详情"
-            app:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:id="@+id/toolbar_item"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/blue"
+        app:title="事件详情"
+        app:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar">
     </android.support.v7.widget.Toolbar>
 
 
     <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -314,7 +317,13 @@
 
 
 
+    <FrameLayout
+        android:id="@+id/framelayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+    </FrameLayout>
 
 
 </LinearLayout>

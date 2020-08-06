@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -12,11 +13,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.taskforandroid.Activity.js.MJavascriptInterface;
-import com.example.taskforandroid.Activity.js.MyWebViewClient;
+import com.example.taskforandroid.Activity.webview.MJavascriptInterface;
+import com.example.taskforandroid.Activity.webview.MyWebChromeClient;
+import com.example.taskforandroid.Activity.webview.MyWebViewClient;
 import com.example.taskforandroid.Bean.TaskAndUser;
 import com.example.taskforandroid.R;
 import com.example.taskforandroid.Tool.GetSystemUtils;
@@ -25,8 +30,6 @@ import com.google.gson.Gson;
 
 
 import okhttp3.*;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,6 +62,8 @@ public class ItemActivity extends BaseActivity {
     Button button5;
     Button button6;
 
+    Toolbar toolbar;
+
 //    MyImageGetter myImageGetter;
 //    MyTagHandler tagHandler;
 
@@ -76,7 +81,7 @@ public class ItemActivity extends BaseActivity {
         context = this;
 
         //找到标题栏控件
-        Toolbar toolbar=findViewById(R.id.toolbar_item);
+        toolbar=findViewById(R.id.toolbar_item);
         //将标题栏设置为自定义toolbar组件
         this.setSupportActionBar(toolbar);
         //决定左上角图标是否可以点击
@@ -225,15 +230,8 @@ public class ItemActivity extends BaseActivity {
 
                         String data=response.body().string();
 
-                        try {
-                            JSONObject jsonObject = new JSONObject(data);
-                            String message = jsonObject.getString("message");
-                            ToastMeaagge(message);
-                            gohome();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                        ToastMeaagge(data);
+                        gohome();
 
 
                     }
@@ -309,7 +307,7 @@ public class ItemActivity extends BaseActivity {
     }
 
 
-
+    //获取html中的链接
     public static String [] returnImageUrlsFromHtml(String htmlCode) {
         List<String> imageSrcList = new ArrayList<String>();
         Pattern p = Pattern.compile("<img\\b[^>]*\\bsrc\\b\\s*=\\s*('|\")?([^'\"\n\r\f>]+(\\.jpg|\\.bmp|\\.eps|\\.gif|\\.mif|\\.miff|\\.png|\\.tif|\\.tiff|\\.svg|\\.wmf|\\.jpe|\\.jpeg|\\.dib|\\.ico|\\.tga|\\.cut|\\.pic|\\b)\\b)[^>]*>", Pattern.CASE_INSENSITIVE);
@@ -322,11 +320,14 @@ public class ItemActivity extends BaseActivity {
             imageSrcList.add(src);
         }
         if (imageSrcList == null || imageSrcList.size() == 0) {
-            Log.e("imageSrcList","资讯中未匹配到图片链接");
+            Log.e("imageSrcList","无图片链接");
             return null;
         }
         return imageSrcList.toArray(new String[imageSrcList.size()]);
     }
+
+
+
 
 
     Gson gson = new Gson();
@@ -387,6 +388,10 @@ public class ItemActivity extends BaseActivity {
                     GetSystemUtils.verifyStoragePermissions(context);
 
 
+                    FrameLayout frameLayout = findViewById(R.id.framelayout);
+                    ScrollView scrollView = findViewById(R.id.scrollview);
+
+
                     //允许javascript执行
                     item9_tv.getSettings().setJavaScriptEnabled(true);
                     //设置缓存开启
@@ -398,6 +403,7 @@ public class ItemActivity extends BaseActivity {
 
                     //帮助WebView处理各种请求事件；
                     item9_tv.setWebViewClient(new MyWebViewClient());
+                    item9_tv.setWebChromeClient(new MyWebChromeClient(context,frameLayout,scrollView,toolbar));
 
                     String[] imageUrls = returnImageUrlsFromHtml(taskAndUser.getTask().getContent());
 

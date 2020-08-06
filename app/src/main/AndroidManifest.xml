@@ -15,13 +15,14 @@
 
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- 忽略电池优化 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 写sd卡权限，做数据备份 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 写入内部存储数据权限 -->
     <uses-permission android:name="android.permission.PERMISSIONS_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 读sd卡权限，做数据备份 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 读取内部存储数据权限 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- 8.0安装apk权限，需要允许安装未知应用 -->
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <!--    configChanges:在activity切换横竖屏的时候不会重新调用activity的生命周期;hardwareAccelerated:应用启动硬件加速-->
     <application
         android:allowBackup="true"
         android:icon="@drawable/ico"
@@ -99,6 +100,8 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".Activity.ItemActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:hardwareAccelerated ="true"
             android:launchMode="singleTask" />
         <activity
             android:name=".Activity.EditActivity"

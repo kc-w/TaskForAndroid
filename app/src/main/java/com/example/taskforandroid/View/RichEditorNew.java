@@ -135,7 +135,7 @@ public class RichEditorNew extends RichEditor {
             //根据视频地址截取视频的缩略图
             Bitmap videoBitmap = FilesUtils.getVideoBitmap(videoUrl);
             if (videoBitmap != null) {
-                //保存bitmap的url地址
+                //保存视频第一帧的url地址
                 String videoBitmapUrl = FilesUtils.saveBitmap(context,videoBitmap);
                 if (!TextUtils.isEmpty(videoBitmapUrl)) {
                     posterUrl = videoBitmapUrl;

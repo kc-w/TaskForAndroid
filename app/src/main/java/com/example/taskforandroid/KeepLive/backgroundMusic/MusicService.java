@@ -64,7 +64,7 @@ public class MusicService extends Service {
         if (mAudioManager != null)
             mAudioManager.requestAudioFocus(mAudioFocusChange, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-        mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw);
+        mMediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.nosound);
         mMediaPlayer.setLooping(true);
 
         startPlayMusic();
