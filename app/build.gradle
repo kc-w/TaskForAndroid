@@ -79,12 +79,12 @@ dependencies {
 
     implementation 'com.getui:gtsdk:3.0.2.0'
 
-    implementation 'com.fanjun:keeplive:1.1.22'
+    implementation 'com.fanjun:keeplive:1.1.22'//保活库
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
 
 
-    implementation 'com.bm.photoview:library:1.4.1'
+    implementation 'com.bm.photoview:library:1.4.1'//图片查看库
 
 
 

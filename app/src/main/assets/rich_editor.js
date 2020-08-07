@@ -29,7 +29,7 @@ document.addEventListener("selectionchange", function() {
         isInit = true
         //初始化 java代码直接设置不行 必须在此时选中后
         console.log("初始化-默认style")
-        document.execCommand("fontSize", false, 2);
+        document.execCommand("fontSize", false, 3);
         RE.fixFontSize()
     }else{
         RE.backuprange();

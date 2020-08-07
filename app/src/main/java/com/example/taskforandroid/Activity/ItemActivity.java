@@ -205,12 +205,9 @@ public class ItemActivity extends BaseActivity {
     //发出请求获得task数据
     public void okhttpUpdate(final String flag) {
 
-        new Thread(new Runnable() {
             //得到存储的sessionid
             String sessionid= preferences.getString("sessionid","null");
 
-            @Override
-            public void run() {
                 OkHttpClient client=new OkHttpClient();
                 Request request=new Request.Builder().url(getResources().getString(R.string.url)+"/UpStaetServlet?task_id="+id+"&flag="+flag)
                         .addHeader("cookie",sessionid)
@@ -220,27 +217,18 @@ public class ItemActivity extends BaseActivity {
                 call.enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        gohome();
                         ToastMeaagge("网络异常!");
 
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-
+                        finish();
                         String data=response.body().string();
-
                         ToastMeaagge(data);
-                        gohome();
-
 
                     }
                 });
-
-            }
-        }).start();
-
-        gohome();
 
     }
 
@@ -250,36 +238,29 @@ public class ItemActivity extends BaseActivity {
     //发出请求获得task数据
     public void okhttpDate() {
 
-        new Thread(new Runnable() {
             //得到存储的sessionid
             String sessionid= preferences.getString("sessionid","null");
+            OkHttpClient client=new OkHttpClient();
+            Request request=new Request.Builder().url(getResources().getString(R.string.url)+"/SelectTaskServlet?task_id="+id)
+                    .addHeader("cookie",sessionid)
+                    .get()
+                    .build();
+            Call call = client.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    ToastMeaagge("网络异常,登录失败！");
 
-            @Override
-            public void run() {
-                OkHttpClient client=new OkHttpClient();
-                Request request=new Request.Builder().url(getResources().getString(R.string.url)+"/SelectTaskServlet?task_id="+id)
-                        .addHeader("cookie",sessionid)
-                        .get()
-                        .build();
-                Call call = client.newCall(request);
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        ToastMeaagge("网络异常,登录失败！");
+                }
 
-                    }
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
+                    String data=response.body().string();
+                    jsonJXDate(data);
 
-                        String data=response.body().string();
-                        jsonJXDate(data);
-
-                    }
-                });
-
-            }
-        }).start();
+                }
+            });
 
     }
 
@@ -300,11 +281,7 @@ public class ItemActivity extends BaseActivity {
     }
 
 
-    public void gohome(){
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
 
-    }
 
 
     //获取html中的链接

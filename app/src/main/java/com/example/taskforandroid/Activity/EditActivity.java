@@ -319,7 +319,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener{
         if (android.os.Build.BRAND.equals("Xiaomi")) {//是否是小米设备,是的话用到弹窗选取入口的方法去选取视频
             Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "video/*");
-            startActivityForResult(Intent.createChooser(intent, "选择要导入的视频"), 3);
+            startActivityForResult(Intent.createChooser(intent, "选择要导入的视频(视频时长不超过十秒)"), 3);
         } else {//直接跳到系统相册去选取视频
             Intent intent = new Intent();
             if (Build.VERSION.SDK_INT < 19) {
@@ -538,7 +538,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener{
                 String sessionid= preferences.getString("sessionid","null");
                 //创建一个OkHttpClient对象
                 OkHttpClient client=new OkHttpClient();
-                RequestBody fileBody = RequestBody.create(MediaType.parse("image/*"), file);
+                RequestBody fileBody = RequestBody.create(MediaType.parse("*/*"), file);
                 RequestBody requestBody = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
                         .addFormDataPart("keyname", file.getName(), fileBody)
