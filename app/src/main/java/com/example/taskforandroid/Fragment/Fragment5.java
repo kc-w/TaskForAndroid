@@ -94,35 +94,28 @@ public class Fragment5 extends Fragment {
 
     public void okhttpDate() {
 
-
-
-        new Thread(new Runnable() {
+        preferences = getActivity().getSharedPreferences("userinfo", Activity.MODE_PRIVATE);
+        String sessionid= preferences.getString("sessionid","null");
+        OkHttpClient client=new OkHttpClient();
+        Request request=new Request.Builder()
+                .addHeader("cookie",sessionid)
+                .url(getActivity().getResources().getString(R.string.url)+"/SelectTaskServlet?task_state=myThing")
+                .get()
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
             @Override
-            public void run() {
-                preferences = getActivity().getSharedPreferences("userinfo", Activity.MODE_PRIVATE);
-                String sessionid= preferences.getString("sessionid","null");
-                OkHttpClient client=new OkHttpClient();
-                Request request=new Request.Builder()
-                        .addHeader("cookie",sessionid)
-                        .url(getActivity().getResources().getString(R.string.url)+"/SelectTaskServlet?task_state=myThing")
-                        .get()
-                        .build();
-                Call call = client.newCall(request);
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        ToastMeaagge("网络异常,登录失败！");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String data=response.body().string();
-                        jsonJXDate(data);
-                    }
-                });
-
+            public void onFailure(Call call, IOException e) {
+                ToastMeaagge("网络异常,登录失败！");
             }
-        }).start();
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data=response.body().string();
+                jsonJXDate(data);
+            }
+        });
+
 
     }
 

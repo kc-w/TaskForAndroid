@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -112,34 +113,32 @@ public class Fragment4 extends Fragment {
     public void okhttpDate() {
 
 
-
-        new Thread(new Runnable() {
+        preferences = getActivity().getSharedPreferences("userinfo", MODE_PRIVATE);
+        String sessionid= preferences.getString("sessionid","null");
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)//连接超时
+                .writeTimeout(10, TimeUnit.SECONDS)//上传超时时间
+                .readTimeout(20, TimeUnit.SECONDS)//下载超时时间
+                .build();
+        Request request=new Request.Builder()
+                .addHeader("cookie",sessionid)
+                .url(getActivity().getResources().getString(R.string.url)+"/SelectTaskServlet?task_state=延期")
+                .get()
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
             @Override
-            public void run() {
-                preferences = getActivity().getSharedPreferences("userinfo", Activity.MODE_PRIVATE);
-                String sessionid= preferences.getString("sessionid","null");
-                OkHttpClient client=new OkHttpClient();
-                Request request=new Request.Builder()
-                        .addHeader("cookie",sessionid)
-                        .url(getActivity().getResources().getString(R.string.url)+"/SelectTaskServlet?task_state=延期")
-                        .get()
-                        .build();
-                Call call = client.newCall(request);
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        ToastMeaagge("网络异常,登录失败！");
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String data=response.body().string();
-                        jsonJXDate(data);
-                    }
-                });
-
+            public void onFailure(Call call, IOException e) {
+                ToastMeaagge("网络异常,登录失败！");
             }
-        }).start();
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String data=response.body().string();
+                jsonJXDate(data);
+            }
+        });
+
 
     }
 

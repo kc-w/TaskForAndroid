@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -170,11 +173,27 @@ public class ProgressActivity extends BaseActivity{
 
     //视频
     public void insertVideo(View view) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("video/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);//多选
-        startActivityForResult(intent, 3);
+        if (android.os.Build.BRAND.equals("Huawei")) {
+            Intent intentPic = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intentPic, 3);
+        }
+        if (android.os.Build.BRAND.equals("Xiaomi")) {//是否是小米设备,是的话用到弹窗选取入口的方法去选取视频
+            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "video/*");
+            startActivityForResult(Intent.createChooser(intent, "选择要导入的视频(视频时长不超过十秒)"), 3);
+        } else {//直接跳到系统相册去选取视频
+            Intent intent = new Intent();
+            if (Build.VERSION.SDK_INT < 19) {
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("video/*");
+            } else {
+                intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("video/*");
+            }
+            startActivityForResult(Intent.createChooser(intent, "选择要导入的视频"), 3);
+        }
     }
 
     //文件
@@ -227,9 +246,23 @@ public class ProgressActivity extends BaseActivity{
 
 
             if(requestCode==3){
-                String filePath = GetSystemUtils.getFilePathFromUri(this,  uri,".mp4");
-                //插入视频
-                richEditor.insertVideo(filePath,"","",this);
+                String path = GetSystemUtils.getRealPathFromURI(this,uri);
+
+                String suffix = path.substring(path.lastIndexOf(".") + 1);
+
+                String filePath = GetSystemUtils.getFilePathFromUri(this,  uri,"."+suffix);
+
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();//实例化MediaMetadataRetriever对象
+                mmr.setDataSource(filePath);
+                String duration = mmr.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION);//时长(毫秒)
+                int int_duration = Integer.parseInt(duration);
+                if (int_duration > 11000) {
+                    Toast.makeText(this, "视频时长已超过10秒，请重新选择", Toast.LENGTH_SHORT).show();
+
+                }else {
+                    //插入视频
+                    richEditor.insertVideo(filePath,"","",context);
+                }
 
             }
 
@@ -373,7 +406,6 @@ public class ProgressActivity extends BaseActivity{
 
                 @Override//回调成功
                 public void onResponse(Call call, Response response) throws IOException {
-                    richEditor.clearLocalRichEditorCache();
 
                     finish();
                     ToastMeaagge(response.body().string());

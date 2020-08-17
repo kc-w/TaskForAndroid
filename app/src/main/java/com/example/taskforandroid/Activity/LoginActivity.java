@@ -246,7 +246,15 @@ public class LoginActivity extends BaseActivity {
         final SaveDialog dialog = new SaveDialog(this,R.style.Dialog1);
         dialog.show();
         dialog.setHintText("正常接收消息推送需要开启自动启动权限");
-        dialog.setLeftButton("前往开启", new View.OnClickListener() {
+
+        dialog.setLeftButton("取消", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setRightButton("前往开启", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MobileInfoUtils.jumpStartInterface(context);
@@ -256,12 +264,7 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        dialog.setRightButton("取消", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+
 
 
     }
