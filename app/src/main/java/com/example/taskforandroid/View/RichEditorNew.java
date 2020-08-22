@@ -104,7 +104,7 @@ public class RichEditorNew extends RichEditor {
         }
 
         title += fileName;
-        insertHtml("<a href=\"" + downloadUrl + "\" download=\"" + fileName + "\">" + title + "</a><br></br>");
+        insertHtml("<a href=\"" + downloadUrl + "\" download=\"" + fileName + "\">" + title + "</a><br><br>");
     }
 
 

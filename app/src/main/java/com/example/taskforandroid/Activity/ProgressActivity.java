@@ -22,12 +22,14 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.taskforandroid.Bean.TaskAndUser;
 import com.example.taskforandroid.Listener.KeyboardStateObserver;
 import com.example.taskforandroid.R;
 import com.example.taskforandroid.Tool.GetSystemUtils;
 import com.example.taskforandroid.Tool.ImageUtils;
 import com.example.taskforandroid.View.RichEditor;
 import com.example.taskforandroid.View.RichEditorNew;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,9 +50,12 @@ public class ProgressActivity extends BaseActivity{
 
 
     SharedPreferences preferences;
-    SharedPreferences.Editor editor;
 
-    int id;
+
+    int task_id;
+
+    String html;
+    String progresshtml;
 
     Context context;
 
@@ -94,8 +99,12 @@ public class ProgressActivity extends BaseActivity{
 
         //读取intent的数据给bundle对象
         Bundle bundle = this.getIntent().getExtras();
-        id = bundle.getInt("task_id");
+        task_id = bundle.getInt("task_id");
+        html = bundle.getString("html");
+        progresshtml = bundle.getString("progresshtml");
 
+
+        richEditor.setHtml(progresshtml);
 
 
 
@@ -144,6 +153,7 @@ public class ProgressActivity extends BaseActivity{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
 
                 break;
 
@@ -373,6 +383,8 @@ public class ProgressActivity extends BaseActivity{
 
     }
 
+
+
     private void publishTask(final String httpHtml) {
 
         if ("".equals(httpHtml) || httpHtml==null){
@@ -382,43 +394,99 @@ public class ProgressActivity extends BaseActivity{
         }else {
 
 
-            //得到存储的sessionid
-            String sessionid= preferences.getString("sessionid","null");
-            //创建一个OkHttpClient对象
-            OkHttpClient client=new OkHttpClient();
-            RequestBody requestBody = new FormBody.Builder()
-                    .add("id", String.valueOf(id))
-                    .add("html", httpHtml)
-                    .build();
-            Request request = new Request.Builder()
-                    .url(getResources().getString(R.string.url)+"/ProgressServlet")
-                    .addHeader("cookie",sessionid)
-                    .post(requestBody)
-                    .build();
 
-            Call call = client.newCall(request);
-            //执行请求,并产生回调
-            call.enqueue(new Callback() {
-                @Override//回调失败
-                public void onFailure(Call call, IOException e) {
-                    ToastMeaagge("网络异常!");
-                }
 
-                @Override//回调成功
-                public void onResponse(Call call, Response response) throws IOException {
+            if (progresshtml==null || "".equals(progresshtml)){
 
-                    finish();
-                    ToastMeaagge(response.body().string());
-                }
+                Log.e("TAG", "增加进度" );
 
-            });
+
+                //得到存储的sessionid
+                String sessionid= preferences.getString("sessionid","null");
+                //创建一个OkHttpClient对象
+                OkHttpClient client=new OkHttpClient();
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("id", String.valueOf(task_id))
+                        .add("flag", "add")
+                        .add("httpHtml", httpHtml)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(getResources().getString(R.string.url)+"/ProgressServlet")
+                        .addHeader("cookie",sessionid)
+                        .post(requestBody)
+                        .build();
+
+                Call call = client.newCall(request);
+                //执行请求,并产生回调
+                call.enqueue(new Callback() {
+                    @Override//回调失败
+                    public void onFailure(Call call, IOException e) {
+                        ToastMeaagge("网络异常!");
+                    }
+
+                    @Override//回调成功
+                    public void onResponse(Call call, Response response) throws IOException {
+
+                        Intent intent = new Intent();
+                        intent.putExtra("task_id", task_id);
+                        intent.setClass(context, ItemActivity.class);
+                        context.startActivity(intent);
+                        ToastMeaagge(response.body().string());
+
+                    }
+
+                });
+
+
+            }else {
+
+                //得到存储的sessionid
+                String sessionid= preferences.getString("sessionid","null");
+                //创建一个OkHttpClient对象
+                OkHttpClient client=new OkHttpClient();
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("id", String.valueOf(task_id))
+                        .add("flag", "change")
+                        .add("html", html)
+                        .add("progresshtml", progresshtml)
+                        .add("httpHtml", httpHtml)
+                        .build();
+                Request request = new Request.Builder()
+                        .url(getResources().getString(R.string.url)+"/ProgressServlet")
+                        .addHeader("cookie",sessionid)
+                        .post(requestBody)
+                        .build();
+
+                Call call = client.newCall(request);
+                //执行请求,并产生回调
+                call.enqueue(new Callback() {
+                    @Override//回调失败
+                    public void onFailure(Call call, IOException e) {
+                        ToastMeaagge("网络异常!");
+                    }
+
+                    @Override//回调成功
+                    public void onResponse(Call call, Response response) throws IOException {
+
+                        Intent intent = new Intent();
+                        intent.putExtra("task_id", task_id);
+                        intent.setClass(context, ItemActivity.class);
+                        context.startActivity(intent);
+                        ToastMeaagge(response.body().string());
+
+                    }
+
+                });
+
+            }
+
+
+
         }
 
 
 
     }
-
-
 
 
 

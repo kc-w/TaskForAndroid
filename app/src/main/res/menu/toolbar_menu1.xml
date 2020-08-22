@@ -5,20 +5,25 @@
 
 
     <item
-            android:id="@+id/add_task"
-            android:title="添加任务"
-            android:icon="@drawable/add"
-            app:showAsAction="always" />
+        android:id="@+id/add_task"
+        android:title="添加任务"
+        android:icon="@drawable/add"
+        app:showAsAction="always" />
 
     <item
-            android:id="@+id/search_history"
-            android:title="查询历史"
-            app:showAsAction="never" />
+        android:id="@+id/search_history"
+        android:title="查询历史"
+        android:visible="true"
+        app:showAsAction="never" />
 
     <item
-            android:id="@+id/changePW"
-            android:title="修改密码"
-            app:showAsAction="never" />
+        android:id="@+id/changePW"
+        android:title="修改密码"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/version"
+        android:title="查看版本"
+        app:showAsAction="never" />
     <item
             android:id="@+id/out"
             android:title="退出账号"

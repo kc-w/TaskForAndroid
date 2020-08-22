@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">事件薄</string>
 
-<!--    <string name="url">http://192.168.1.126:8080/TaskForWeb</string>-->
-    <string name="url">http://14.29.169.203:8080/TaskForWeb</string>
+    <string name="url">http://192.168.1.126:8080/TaskForWeb</string>
+<!--    <string name="url">http://14.29.169.203:8080/TaskForWeb</string>-->
 
 </resources>

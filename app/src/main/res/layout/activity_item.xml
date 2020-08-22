@@ -303,6 +303,15 @@
                     android:background="@drawable/button_style1"
                     android:text="添加进度"/>
 
+                <Button
+                    android:id="@+id/delete_progress"
+                    android:visibility="gone"
+                    android:layout_margin="5dp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_style1"
+                    android:text="删除进度"/>
+
             </LinearLayout>
 
 

@@ -22,24 +22,10 @@ public class KeepManager {
         return mInstance;
     }
 
-//    public void registerKeep(Context context) {
-//        IntentFilter filter = new IntentFilter();
-//        filter.addAction(Intent.ACTION_SCREEN_ON);
-//        filter.addAction(Intent.ACTION_SCREEN_OFF);
-//
-//        myReceiver = new MyReceiver();
-//        context.registerReceiver(myReceiver, filter);
-//    }
-//
-//    public void unRegisterKeep(Context context){
-//        if (myReceiver != null) {
-//            context.unregisterReceiver(myReceiver);
-//        }
-//    }
 
     public void startKeep(Context context) {
         Intent intent = new Intent(context, PxActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

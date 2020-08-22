@@ -413,6 +413,30 @@ public class MainActivity extends BaseActivity {
                 break;
 
 
+            case R.id.version:
+
+
+                PackageManager packageManager = getPackageManager();
+                //getPackageName()是你当前程序的包名
+                PackageInfo packInfo = null;
+                try {
+                    packInfo = packageManager.getPackageInfo(getPackageName(), 0);
+
+                    String appVersionName = packInfo.versionName;
+
+
+                    AlertDialog alertDialog1 = new AlertDialog.Builder(this)
+                            .setTitle("查看版本号")
+                            .setMessage("当前版本:"+appVersionName).show();
+
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+
+                break;
+
             case R.id.out://忘记账号
                 editor.clear().commit();
                 finish();
@@ -447,18 +471,7 @@ public class MainActivity extends BaseActivity {
 
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 1:
-                if(resultCode == RESULT_OK){
-                    Bundle bundle = data.getExtras();
 
-                }
-                break;
-        }
-    }
 
 
     @Override

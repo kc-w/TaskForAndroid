@@ -25,7 +25,7 @@ public class StartService extends Service {
         super.onCreate();
 
 
-        //动态注册广播
+        //动态注册广播,监听锁屏,解锁,开屏
         myReceiver = new MyReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_SCREEN_OFF);

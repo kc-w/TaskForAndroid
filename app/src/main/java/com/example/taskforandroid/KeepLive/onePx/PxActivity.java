@@ -13,7 +13,7 @@ import com.example.taskforandroid.Activity.BaseActivity;
 public class PxActivity extends BaseActivity {
 
 
-    private static final String TAG = "SinglePixelActivity";
+    private static final String TAG = "PxActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

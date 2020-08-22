@@ -67,14 +67,14 @@ public class LoginActivity extends BaseActivity {
         startService(intent1);
 
         //启动后台服务播放音乐
-        Intent intent2 = new Intent(this, MusicService.class);
-        startService(intent2);
+//        Intent intent2 = new Intent(this, MusicService.class);
+//        startService(intent2);
 
-//        //开启管理，监听广播开启关闭一像素活动
-//        KeepManager.getInstance().registerKeep(this);
+
 
         //开启JobSchedule定期拉活
-        MyJobService.startJob(this);
+//        Intent intent3 = new Intent(this, MyJobService.class);
+//        startService(intent3);
 
 
 
@@ -152,7 +152,6 @@ public class LoginActivity extends BaseActivity {
 
 
         if(!"".equals(number)){
-            Log.e("保存在本地的账号和密码", "number: "+number +"password: "+password);
 
             edit1.setText(number);
             edit2.setText(password);
@@ -177,8 +176,6 @@ public class LoginActivity extends BaseActivity {
                 okhttpDate(edit1.getText().toString(),edit2.getText().toString());
             }
         });
-
-
     }
 
 
@@ -303,7 +300,6 @@ public class LoginActivity extends BaseActivity {
                             Headers headers =response.headers();
 
                             List cookies = headers.values("Set-Cookie");
-                            Log.e(getClass().getSimpleName(), cookies.toString());
 
                             String session = (String) cookies.get(0);
                             String sessionid = session.substring(0,session.indexOf(";"));
@@ -311,7 +307,7 @@ public class LoginActivity extends BaseActivity {
                             //得到内容
                             String data=response.body().string();
 
-                            Log.e("TAG",  data);
+
 
                             try {
                                 JSONObject jsonObject = new JSONObject(data);

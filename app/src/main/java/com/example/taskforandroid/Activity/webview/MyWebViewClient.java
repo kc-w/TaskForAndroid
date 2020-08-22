@@ -16,16 +16,29 @@ public class MyWebViewClient extends WebViewClient {
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
 
-        Log.e("TAG", "网页加载完成" );
+        Log.e("TAG", "网页加载完成,嵌入动态js" );
         //调用javascript方法
-        view.loadUrl("javascript:(function(){" +
+        view.loadUrl(
+                "javascript:(function(){" +
                 "var objs = document.getElementsByTagName(\"img\"); " +
                 "for(var i=0;i<objs.length;i++){" +
                 "    objs[i].onclick=function() {" +
-                "        window.imagelistener.openImage(this.src);  " +//通过js代码找到标签为img的代码块，设置点击的监听方法与本地的openImage方法进行连接
-                "    }  " +
-                "}" +
-                "})()");
+                "        window.listener.openImage(this.src);  " +//通过js代码找到标签为img的代码块，设置点击的监听方法与本地的openImage方法进行连接
+                "    };  " +
+                "};" +
+                "})();"+
+
+                "javascript:(function(){" +
+                "var objs = document.getElementsByTagName(\"p\"); " +
+                "var i=0;" +
+                "for(i=0;i<objs.length;i++){" +
+                "    objs[i].onclick=function() {" +
+                "        window.listener.changeProgress(this.innerHTML,this.nextSibling.innerHTML);  " +
+                "    };  " +
+                "    i=i+1;" +
+                "};" +
+                "})();"
+        );
 
 
     }

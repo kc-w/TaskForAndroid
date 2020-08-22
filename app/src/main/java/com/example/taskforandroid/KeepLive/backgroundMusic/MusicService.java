@@ -32,7 +32,7 @@ public class MusicService extends Service {
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS:
                             Log.e(TAG, "失去了Audio Focus");
-//                            startPlayMusic();
+                            startPlayMusic();
 //                            mAudioManager.abandonAudioFocus(mAudioFocusChange);
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:

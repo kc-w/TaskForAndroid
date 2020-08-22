@@ -17,6 +17,7 @@ public class MyReceiver extends BroadcastReceiver {
 
         String action = intent.getAction();
 
+        //监听锁屏
         if (action.equals(Intent.ACTION_SCREEN_OFF)) {
 
 
@@ -25,11 +26,11 @@ public class MyReceiver extends BroadcastReceiver {
             Intent service2 = new Intent(context, StartService.class);
             context.startService(service2);
 
-            KeepManager.getInstance().startKeep(context);
 
             Log.e(getClass().getSimpleName(), "锁屏.....");
 
 
+            //监听解锁
         } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
 
 
@@ -38,10 +39,10 @@ public class MyReceiver extends BroadcastReceiver {
             Intent service2 = new Intent(context, StartService.class);
             context.startService(service2);
 
-            KeepManager.getInstance().finishKeep();
 
             Log.e(getClass().getSimpleName(), "解锁.....");
 
+            //监听开屏
         }else if(action.equals(Intent.ACTION_USER_PRESENT)){
 
             PushManager.getInstance().initialize(context);
